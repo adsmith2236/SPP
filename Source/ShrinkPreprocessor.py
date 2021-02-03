@@ -26,18 +26,19 @@ def reset_molecule():
 def identify_input(filename):
     reset_molecule()
     file = open(filename, "r")
+    force_constants = ""
     if filename.endswith(".fchk"):
-        force_contants = read_gaussian_chck(file)
+        force_constants = read_gaussian_chck(file)
     else:
         line = file.readline()
         while line != "":
             if "NWChem" in line:
-                force_contants = read_nesi(file)
+                force_constants = read_nesi(file)
             elif "Gaussian" in line:
-                force_contants = read_gaussian(file)
+                force_constants = read_gaussian(file)
             line = file.readline()
     file.close()
-    return force_contants
+    return force_constants
 
 
 def read_gaussian(file):
@@ -453,7 +454,7 @@ root = Tk()
 root.title("Shrink Preprocessor")
 root.geometry("450x80")
 current_status = StringVar()
-current_status.set("Awaiting Gaussian output, Gaussian formatted checkpoint, or NeSI output file")
+current_status.set("Awaiting Gaussian output, Gaussian formatted checkpoint, or NWChem output file")
 status_text = Label(root, textvariable=current_status)
 status_text.grid(row=0, column=0)
 upload_button = Button(root, text="Select input file", command=select_file)
